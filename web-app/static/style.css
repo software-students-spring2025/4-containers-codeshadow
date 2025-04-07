@@ -36,6 +36,7 @@ button{
     width: 500px;
     height: 500px;
     border: 2px solid #ccc;
+    background-color: aqua;
     border-radius: 10px;
     overflow: hidden;
     display: flex;
@@ -49,3 +50,13 @@ button{
     gap: 500px;
     align-items: center;
   }
+#startBtn{
+    margin: 0;     /* Removes default margin around the body */
+    display: flex; /* Enables flexbox layout */
+    position: fixed;
+    left: 700px;
+    top: 500px;
+}
+.emotions{
+display: none;
+}
