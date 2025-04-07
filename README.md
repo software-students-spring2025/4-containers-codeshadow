@@ -6,7 +6,7 @@
 
 ## Team Members
 [Oluwapelumi Adesiyan](https://github.com/oadesiyan) <br />
-[Nassim Uddin](https://github.com/naseem-student) <br />
+[Naseem Uddin](https://github.com/naseem-student) <br />
 [Jibril Wague](https://github.com/Jibril1010) <br />
 
 ## Configuration Instructions
