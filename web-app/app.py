@@ -16,11 +16,12 @@ login_manager.login_view = "login"
 
 #mongodb client
 client = pymongo.MongoClient(os.getenv("MONGO_URI"), tlsCAFile=certifi.where())
-db = client[os.getenv("MONGO_DBNAME")]
-users = db.users
+#db = client[os.getenv("MONGO_DBNAME")]
+#users = db.users
 
 @app.route("/", methods=['GET', 'POST'])
 def login():
+    return render_template("templates/login.html")
     if request.method == 'POST':
         username = request.form.get('username')
         entered_pw = request.form.get('password')
@@ -29,6 +30,7 @@ def login():
             flash("Username and password are required", "danger")
             return redirect(url_for("login"))
     
+'''    
         user_doc = users.find_one({"username": username})
 
         if user_doc and (entered_pw == user_doc["password"]): #correct credentials
@@ -39,8 +41,8 @@ def login():
         else:
             flash("Invalid username or password", "danger")
             return render_template("login.html")
-        
-    return render_template("login.html")
+        '''
+    #return render_template("templates/login.html")
 
 @app.route("/home")
 @login_required
