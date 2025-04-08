@@ -32,5 +32,15 @@
 
 <button id="startBtn">Start Webcam</button>
 <script src="{{ url_for('static', filename='script.js') }}"></script>
+
+<h2> Data from DB</h2>
+{% for emotion in emotions%}
+<li>{{emotion['Name']}}</li>
+<li>{{emotion['happy_count']}}</li>
+{%endfor %}
+
+
+<h1>Welcome to the Home Page</h1>
+<a href="{{ url_for('chart') }}">Go to About Page</a>
 </body>
 </html>

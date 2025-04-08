@@ -3,6 +3,7 @@ const startBtn = document.getElementById('startBtn');
 const videoElement = document.getElementById('video');  
 const boxesContainer = document.getElementById('boxes');
 const Emo = document.getElementById('Username');
+
 startBtn.addEventListener('click', function () {
     
     if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
@@ -20,3 +21,4 @@ startBtn.addEventListener('click', function () {
         alert('Your browser does not support webcam access');
     }
 });
+
