@@ -27,7 +27,7 @@ function captureAndSendImage(videoElement) {
 
     const base64Image = canvas.toDataURL('image/jpeg');
 
-    fetch('http://localhost:5000/submit-image', {
+    fetch('/submit-image', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
