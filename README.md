@@ -8,6 +8,7 @@
 [Oluwapelumi Adesiyan](https://github.com/oadesiyan) <br />
 [Naseem Uddin](https://github.com/naseem-student) <br />
 [Jibril Wague](https://github.com/Jibril1010) <br />
+[Brandon Morales](https://github.com/bamoeq) <br /> 
 
 ## Configuration Instructions
 
