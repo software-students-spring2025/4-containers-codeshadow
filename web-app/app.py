@@ -77,6 +77,29 @@ def login():
         '''
     #return render_template("templates/login.html")
 
+@app.route("/index")
+def index():
+    """Render the homepage."""
+    #print("CURRENT USER:", current_user.username)
+    user_doc = users.find_one({"username": current_user.username})
+    if not user_doc:
+        flash("User not found", "danger")
+        return redirect(url_for("login"))
+
+    # Get the most recent emotion detected
+    current_emotion = last_emotion["emotion"]
+
+    # Get the emoji for that emotion
+    #emotion_doc = emotions.find_one({"Name": current_user.username})
+    emotion_doc = emotions.find_one({"Name": current_user.username})
+    emoji = emotion_doc.get(current_emotion, "🤔") if emotion_doc and current_emotion else "🤔"
+
+
+    return render_template("index.html", emoji=emoji)
+
+
+
+
 @app.route("/signup", methods=["GET", "POST"])
 def signup():
     """Create an account"""
