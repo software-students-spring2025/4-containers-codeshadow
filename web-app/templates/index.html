@@ -1,40 +1,54 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Webcam Feed is stupid</title>
-  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-</head>
-<body>
-  <div class="vid">
-    <video  autoplay muted loop>
-        <source src="static/vid1.mp4" type="video/mp4">
-    </video> 
-  </div>
-<div class ="contain" id="boxes">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Live Webcam Feed</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  </head>
 
-  <h1>Webcam Feed</h1>
-  
-  <video id="video" autoplay playsinline width="640" height="480"></video>
+  <body>
+    <div class="vid"> <!--Background video graphic-->
+      <video  autoplay muted loop>
+          <source src="static/vid1.mp4" type="video/mp4">
+      </video> 
+    </div>
 
-  
+    <nav>
+      <a href="{{ url_for('index') }}" class="{{ 'active' if request.endpoint == 'index' else '' }}">Webcam</a>
+      <a href="{{ url_for('track') }}" class="{{ 'active' if request.endpoint == 'track' else '' }}">Emotion Tracker</a>
+    </nav>
 
-  <div class="box">
-    <h3>Second Box</h3>
-    <span id="emojiDisplay" style="font-size: 2rem;">{{ emoji }}</span>
-  </div>
-</div>
-<div class="emotions" id="Username">
-  <p>Welcome, <strong>{{ current_user.username }}</strong>!</p>
-</div>
-
-    <div class="displays">
-  
-        <button id="startBtn">Start Webcam</button>
+    <div class="homePage">
+      <div class="userHome"> <!--Display user name-->
+        {% if current_user.is_authenticated %}
+          <div id="username">
+            <h1>Welcome, <strong>{{ current_user.username }}</strong>!</h1>
+          </div>
+        {% endif %}
       </div>
+  
+      <div class="container" id="boxes"> <!--Display webcam and result-->
+        <div class="box">
+          <div id="video-box">
+            <div> <h1>Webcam Feed</h1> </div>
+            <div>
+              <video id="video" autoplay playsinline width="640" height="480"></video>
+              <div class="displays">
+                <button id="startBtn">Start Webcam</button>
+              </div>
+            </div>
+            
+          </div>>
+        </div>
+  
+        <div class="box">
+          <h1>Detected Emotion</h1>
+          <span id="emojiDisplay" style="font-size: 2rem;">{{ emoji }}</span>
+        </div>
+      </div> <!--Webcam Container-->
+    </div> <!--Homepage Container-->
 
-    
 
     <script src="{{ url_for('static', filename='script.js') }}" defer></script>
   </body>

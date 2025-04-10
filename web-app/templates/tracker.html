@@ -1,18 +1,42 @@
+<!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="styles.css">
-    <title>Tracker</title>
-</head>
+    <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Emotion Tracker</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='track-styles.css') }}">
+    </head>
 
+    <body>
+        <nav class="navbar">
+            <a href="{{ url_for('index') }}" class="{{ 'active' if request.endpoint == 'index' else '' }}">Webcam</a>
+            <a href="{{ url_for('track') }}" class="{{ 'active' if request.endpoint == 'track' else '' }}">Emotion Tracker</a>
+        </nav>
 
-<body>
-    <div class="container">
-        <h1>Track Your Emotions</h1>
+        <h1>Emotion Summary for <span class="username">{{ current_user.username }}</span></h1>
 
-        <br/>
-    </div>
-</body>
+        <div class="tracker-container">            
+            <div class="emotion-grid">              
+              <!-- Table to display emotions and their counts -->
+              <table>
+                <thead>
+                  <tr>
+                    <th>Emotion</th>
+                    <th>Count</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for emotion, count in emotion_summary.items() %}
+                    <tr>
+                      <td>{{ emotion.capitalize() }}</td>
+                      <td>{{ count }}</td>
+                    </tr>
+                  {% endfor %}
+                </tbody>
+              </table>        
+            </div>
+          
+          </div>          
+        
+    </body>
 </html>

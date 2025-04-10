@@ -1,5 +1,9 @@
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
 .vid{
-    position: absolute;
+    position: fixed;
     top: 0;
     left: 0;
     width: 100%;
@@ -53,12 +57,12 @@ button{
     flex-direction: column;
 }
 
-.contain {
+.container {
     display: flex;
+    flex-direction: row;
     gap: 20px;
     align-items: center;
     justify-content: center;
-    flex-direction: column;
     margin-top: 100px;
 }
 
@@ -71,7 +75,7 @@ button{
 }
 
 .emotions{
-    display: none;
+    display: flexbox;
 }
 
 .displays {
@@ -84,4 +88,58 @@ button{
 .sub-display {
     display: flex;
     flex-direction: column;
+}
+
+/* homepage setup */
+.userHome {
+    display: flex;
+}
+
+.homePage {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    padding: 1rem;
+}
+
+#username {
+    text-align: center;
+}
+
+#video-box {
+    display: flex;
+    flex-direction: column;
+}
+
+/*nav-bar*/
+.navbar {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    background-color: #f5f7fa;
+    padding: 1rem;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+    margin-bottom: 2rem;
+    font-family: 'Helvetica Neue', sans-serif;
+}
+  
+.navbar a {
+    text-decoration: none;
+    color: #333;
+    font-size: 1.1rem;
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.navbar a:hover {
+    background-color: #e0e7ff;
+    color: #1e3a8a;
+}
+
+.navbar a.active {
+    background-color: #dbeafe;
+    color: #1d4ed8;
+    font-weight: bold;
 }
