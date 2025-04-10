@@ -16,7 +16,7 @@ startBtn.addEventListener("click", () => {
             })
             .catch((err) => console.error("Camera error:", err));
     });
-});
+
 
 function captureAndSendImage(videoElement) {
     if (!videoElement.videoWidth || !videoElement.videoHeight) {
