@@ -18,7 +18,7 @@ def detect_emotion(base64_image):
         img = readb64(base64_image)
         result = DeepFace.analyze(img, actions=["emotion"], enforce_detection=False)
         return result[0]["dominant_emotion"]
-    except Exception as e:
+    except (IndexError, ValueError, RuntimeError, TypeError) as e:
         print("Emotion detection error:", e)
         return None
 
