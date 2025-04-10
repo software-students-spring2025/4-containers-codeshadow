@@ -29,8 +29,19 @@
   <p>Welcome, <strong>{{ current_user.username }}</strong>!</p>
 </div>
 
-<button id="startBtn">Start Webcam</button>
-<script src="{{ url_for('static', filename='script.js') }}"></script>
-<script src="script.js" defer></script>
-</body>
+    <div class="displays">
+      <div class="sub-display">
+        <h3>Webcam Feed</h3>
+        <video id="video" autoplay playsinline width="640" height="480"></video>
+        <button id="startBtn">Start Webcam</button>
+      </div>
+
+      <div class="box">
+        <h3>Emotion Results</h3>
+        <p id="emotion-box">Your emotions are displayed here!</p>
+      </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='script.js') }}" defer></script>
+  </body>
 </html>

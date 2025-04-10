@@ -13,6 +13,7 @@ from flask_login import current_user, login_required
 import pymongo
 from pymongo import MongoClient
 import os
+import sys
 import certifi
 from bson.objectid import ObjectId
 
@@ -87,8 +88,7 @@ def login():
         '''
     #return render_template("templates/login.html")
 
-@app.route("/home")
-@login_required
+@app.route("/index")
 def index():
     """Render the homepage."""
     print("CURRENT USER:", current_user.username)
@@ -143,6 +143,7 @@ def signup():
 
         ##
         flash("Signup successful!", "success")
+        return redirect(url_for("index"))  #this return was unreachable before
         return redirect(url_for("index"))  #this return was unreachable before
 
     return render_template("signup.html")

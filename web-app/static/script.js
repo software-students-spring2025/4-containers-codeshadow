@@ -7,14 +7,15 @@ const emojiDisplay = document.querySelector("#emojiDisplay");
 startBtn.addEventListener("click", () => {
     navigator.mediaDevices.getUserMedia({ video: true })
         .then((stream) => {
-            console.log("Camera access granted.");
-            video.srcObject = stream;
-            video.play();
-            container.style.display = "flex";
-            startBtn.style.display = "none";
-            setInterval(() => captureAndSendImage(video), 5000); // every 5 sec
-        })
-        .catch((err) => console.error("Camera error:", err));
+                console.log("Camera access granted.");
+                video.srcObject = stream;
+                video.play();
+                container.style.display = "flex";
+                startBtn.style.display = "none";
+                setInterval(() => captureAndSendImage(video), 5000); // every 5 sec
+            })
+            .catch((err) => console.error("Camera error:", err));
+    });
 });
 
 function captureAndSendImage(videoElement) {
