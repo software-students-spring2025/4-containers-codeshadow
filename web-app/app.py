@@ -14,7 +14,7 @@ from dotenv import load_dotenv
 # Get the absolute path to the parent directory
 parent_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.append(os.path.join(parent_dir, "machine-learning-client"))
-from ai import detect_emotion # pylint: disable=import-error
+from ai import detect_emotion # pylint: disable=import-error, wrong-import-position
 
 load_dotenv()
 
