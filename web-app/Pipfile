@@ -7,10 +7,13 @@ name = "pypi"
 pylint = "*"
 black = "*"
 flask = "*"
-flask-cors = "*"
 flask-login = "*"
 dotenv = "*"
 pytest = "*"
+pymongo = "*"
+certifi = "*"
+flask-cors = "*"
+python-dotenv = "*"
 
 [dev-packages]
 

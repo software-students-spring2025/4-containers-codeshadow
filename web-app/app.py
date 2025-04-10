@@ -1,40 +1,36 @@
 """Main Flask application for the emotion detection web app."""
+import os
+import sys
+from datetime import datetime
+
 import flask
 from flask import Flask, render_template, request, redirect, url_for, flash, session, jsonify
 import flask_login
 from flask_login import current_user, login_required
 import pymongo
 from pymongo import MongoClient
-import os
-import sys
 import certifi
 from bson.objectid import ObjectId
-from datetime import datetime
 from flask_cors import CORS
 from dotenv import load_dotenv
+
+parent_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.append(os.path.join(parent_dir, "machine-learning-client"))
+from ai import detect_emotion
 
 load_dotenv()
 
 app = Flask(__name__)
 app.secret_key = os.getenv("SECRET_KEY", "devkey")
 
-#login 
 login_manager = flask_login.LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = "login"
 
-#mongodb client
 client = pymongo.MongoClient(os.getenv("MONGO_URI"), tlsCAFile=certifi.where())
 db = client[os.getenv("MONGO_DBNAME")]
 users = db.users
 emotions= db.Emotions 
-
-#path to the parent directory
-parent_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-
-#path to the machine-learning-client directory
-sys.path.append(os.path.join(parent_dir, "machine-learning-client"))
-from ai import detect_emotion
 
 last_emotion = {"emotion": None, "start_time": datetime.utcnow()}
 
@@ -56,19 +52,17 @@ def login():
             user = User(user_doc)
             flask_login.login_user(user)
             session["user"] = user.id
-            #####
             ensure_emotion_data_for_user(username) 
-            ####
+
             return redirect(url_for("index"))
+        
         else:
             flash("Invalid username or password", "danger")
-
     return render_template("login.html")
 
 @app.route("/index")
 def index():
     """Render the homepage."""
-    #print("CURRENT USER:", current_user.username)
     user_doc = users.find_one({"username": current_user.username})
     if not user_doc:
         flash("User not found", "danger")
@@ -78,7 +72,6 @@ def index():
     current_emotion = last_emotion["emotion"]
 
     # Get the emoji for that emotion
-    #emotion_doc = emotions.find_one({"Name": current_user.username})
     emotion_doc = emotions.find_one({"Name": current_user.username})
     emoji = emotion_doc.get(current_emotion, "🤔") if emotion_doc and current_emotion else "🤔"
 
@@ -96,30 +89,26 @@ def signup():
             flash("Username and password are required", "danger")
             return redirect(url_for("signup"))
 
-        # Check if user already exists
-        existing_user = users.find_one({"username": username})
+        existing_user = users.find_one({"username": username}) # Check if user already exists
         if existing_user:
             flash("Username already taken", "warning")
             return redirect(url_for("signup"))
 
-        # Insert new user
-        users.insert_one({
+        users.insert_one({ # Insert new user
             "username": username,
             "password": password
         })
 
-        # Auto-login the user and redirect to homepage
         user_doc = users.find_one({"username": username})  # fetch the user again
         user = User(user_doc)
         flask_login.login_user(user)
         session["user"] = user.id
-        ###
+
         ensure_emotion_data_for_user(username)
 
-        ##
         flash("Signup successful!", "success")
-        return redirect(url_for("index"))  #this return was unreachable before
 
+        return redirect(url_for("index"))  #this return was unreachable before
     return render_template("signup.html")
 
 @app.route("/submit-image", methods=["POST"])
@@ -152,9 +141,7 @@ def submit_image():
         )
 
         return jsonify({"emotion": emotion, "emoji": emoji})
-
      return jsonify({"emotion": "unknown", "emoji": "🤔"})
-    #########
 
 @app.route("/track")
 def track():
@@ -213,16 +200,16 @@ class User(flask_login.UserMixin):
         self.username = user_doc["username"]
         self.password = user_doc["password"]
 
-    @staticmethod
-    def is_authenticated():
+    @property
+    def is_authenticated(self):
         return True
 
-    @staticmethod
-    def is_active():
+    @property
+    def is_active(self):
         return True
 
-    @staticmethod
-    def is_anonymous():
+    @property
+    def is_anonymous(self):
         return False
 
     def get_id(self):
@@ -233,7 +220,7 @@ def user_loader(user_id):
     """Loads the user if they exist"""
     user_doc = users.find_one({"_id": ObjectId(user_id)})
     if not user_doc:
-        return
+        return None
     
     return User(user_doc)
 
@@ -243,7 +230,7 @@ def request_loader(request):
     username = request.form.get('username')
 
     if not username:
-        return
+        return None
     
     user_doc = users.find_one({"username": username})
 
@@ -254,3 +241,4 @@ def request_loader(request):
 
 if __name__ == "__main__":
     app.run(debug=True)
+    
