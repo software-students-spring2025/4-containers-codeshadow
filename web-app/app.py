@@ -94,7 +94,7 @@ def signup():
         session["user"] = user.id
 
         flash("Signup successful!", "success")
-        return redirect(url_for("index"))  # ⬅️ this return was unreachable before
+        return redirect(url_for("index"))  #this return was unreachable before
 
     return render_template("signup.html")
 
