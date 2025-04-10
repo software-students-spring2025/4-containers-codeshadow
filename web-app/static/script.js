@@ -1,17 +1,19 @@
 const video = document.querySelector("#video");
+const startBtn = document.querySelector("#startBtn");
+const container = document.querySelector(".contain");
 
-if (!video) {
-    console.error("No video element found on page!");
-} else {
+startBtn.addEventListener("click", () => {
     navigator.mediaDevices.getUserMedia({ video: true })
         .then((stream) => {
             console.log("Camera access granted.");
             video.srcObject = stream;
             video.play();
+            container.style.display = "flex";
+            startBtn.style.display = "none";
             setInterval(() => captureAndSendImage(video), 5000); // every 5 sec
         })
         .catch((err) => console.error("Camera error:", err));
-}
+});
 
 function captureAndSendImage(videoElement) {
     if (!videoElement.videoWidth || !videoElement.videoHeight) {
