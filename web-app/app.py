@@ -5,13 +5,29 @@ from flask_login import current_user, login_required
 import pymongo
 from pymongo import MongoClient
 import os
+import sys
 import certifi
 from bson.objectid import ObjectId
+from datetime import datetime
+from flask import Flask, render_template, request, jsonify
+from flask_cors import CORS
 
+# Get the absolute path to the parent directory
+parent_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+# Add the path to the machine-learning-client directory
+sys.path.append(os.path.join(parent_dir, "machine-learning-client"))
+from ai import detect_emotion
 
-app = Flask(__name__)
+last_emotion = {"emotion": None, "start_time": datetime.utcnow()}
+
+app = Flask(
+    __name__,
+    template_folder="templates",
+    static_folder="static"
+)
 app.secret_key = os.getenv("SECRET_KEY", "devkey")
 
+CORS(app)
 
 #login 
 login_manager = flask_login.LoginManager()
@@ -22,7 +38,6 @@ login_manager.login_view = "login"
 client = pymongo.MongoClient(os.getenv("MONGO_URI"), tlsCAFile=certifi.where())
 db = client[os.getenv("MONGO_DBNAME")]
 users = db.users
-
 
 @app.route("/", methods=['GET', 'POST'])
 def login():
@@ -58,12 +73,25 @@ def login():
         '''
     #return render_template("templates/login.html")
 
-@app.route("/home")
-@login_required
+@app.route("/index")
 def index():
     """Render the homepage."""
-    print("CURRENT USER:", current_user.username)
+    #print("CURRENT USER:", current_user.username)
     return render_template("index.html")
+
+@app.route("/submit-image", methods=["POST"])
+def submit_image():
+    """Handle image submission, analyze emotion, and return the result."""
+    data = request.get_json()
+    base64_img = data.get("image")
+    emotion = detect_emotion(base64_img)
+    if emotion and emotion != last_emotion["emotion"]:
+        duration = (datetime.utcnow() - last_emotion["start_time"]).total_seconds()
+        print(f"[{datetime.utcnow()}] {last_emotion['emotion']} to {emotion} (lasted {duration} seconds)")
+        last_emotion["emotion"] = emotion
+        last_emotion["start_time"] = datetime.utcnow()
+
+    return jsonify({"emotion": emotion})
 
 @app.route("/signup", methods=["GET", "POST"])
 def signup():
