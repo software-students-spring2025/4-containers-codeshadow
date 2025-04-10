@@ -16,12 +16,28 @@ login_manager.login_view = "login"
 
 #mongodb client
 client = pymongo.MongoClient(os.getenv("MONGO_URI"), tlsCAFile=certifi.where())
-#db = client[os.getenv("MONGO_DBNAME")]
-#users = db.users
+db = client[os.getenv("MONGO_DBNAME")]
+users = db.users
+
+@app.route("/signup", methods=['POST', 'GET'])
+def signup():
+    if request.method == "POST":
+        username = request.form["username"]
+        password = request.form["password"]
+
+        existing_user = users.find_one({"username": username})
+        if existing_user:
+            flash("Username already exists", "danger")
+            return redirect(url_for("signup")) #, "Username already exists", "danger"
+
+        new_doc = db.users.insert_one({"username": username, "password": password})
+        user_id = str(new_doc.inserted_id)
+        return redirect(url_for("login")) #, message="Sign up successful! You can now log in."
+    return render_template("signup.html")
+
 
 @app.route("/", methods=['GET', 'POST'])
 def login():
-    return render_template("templates/login.html")
     if request.method == 'POST':
         username = request.form.get('username')
         entered_pw = request.form.get('password')
@@ -29,7 +45,7 @@ def login():
         if not username or not entered_pw:
             flash("Username and password are required", "danger")
             return redirect(url_for("login"))
-    
+    return render_template("login.html")
 '''    
         user_doc = users.find_one({"username": username})
 
@@ -49,6 +65,7 @@ def login():
 def index():
     """Render the homepage."""
     return render_template("index.html")
+
 
 
 class User(flask_login.UserMixin):
