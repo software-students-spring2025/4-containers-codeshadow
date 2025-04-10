@@ -42,6 +42,7 @@ CORS(app)
 
 @app.route("/", methods=['GET', 'POST'])
 def login():
+    """Login function to allow entry to users who have an account or need to sign up"""
     if request.method == 'POST':
         username = request.form.get('username')
         entered_pw = request.form.get('password')
@@ -63,19 +64,6 @@ def login():
             flash("Invalid username or password", "danger")
 
     return render_template("login.html")
-'''    
-        user_doc = users.find_one({"username": username})
-
-        if user_doc and (entered_pw == user_doc["password"]): #correct credentials
-            user = User(user_doc)
-            flask_login.login_user(user)
-            session["user"] = user.id
-            return redirect(url_for("home"))
-        else:
-            flash("Invalid username or password", "danger")
-            return render_template("login.html")
-        '''
-    #return render_template("templates/login.html")
 
 @app.route("/index")
 def index():
@@ -96,9 +84,6 @@ def index():
 
 
     return render_template("index.html", emoji=emoji)
-
-
-
 
 @app.route("/signup", methods=["GET", "POST"])
 def signup():
@@ -134,32 +119,11 @@ def signup():
         ##
         flash("Signup successful!", "success")
         return redirect(url_for("index"))  #this return was unreachable before
-        return redirect(url_for("index"))  #this return was unreachable before
 
     return render_template("signup.html")
 
-
-@app.route("/index")
-def index():
-    """Render the homepage."""
-    print("CURRENT USER:", current_user.username)
-    user_doc = users.find_one({"username": current_user.username})
-    if not user_doc:
-        flash("User not found", "danger")
-        return redirect(url_for("login"))
-
-    # Get the most recent emotion detected
-    current_emotion = last_emotion["emotion"]
-
-    # Get the emoji for that emotion
-    emotion_doc = emotions.find_one({"Name": current_user.username})
-    emoji = emotion_doc.get(current_emotion, "🤔") if emotion_doc and current_emotion else "🤔"
-
-    return render_template("index.html", emoji=emoji)
-
 @app.route("/submit-image", methods=["POST"])
 def submit_image():
-    ###########
      """Handle image submission, analyze emotion, and return the result."""
      data = request.get_json()
      base64_img = data.get("image")
@@ -216,7 +180,6 @@ def track():
     # Render the tracker page and pass the emotion summary data
     return render_template("tracker.html", emotion_summary=emotion_summary)
 
-
 DEFAULT_EMOTION_DATA = {
     "anger": "😡",
     "disgust": "🤢",
@@ -233,6 +196,7 @@ DEFAULT_EMOTION_DATA = {
     "sad_count": 0,
     "surprise_count": 0
 }
+
 def ensure_emotion_data_for_user(username):
     """Ensure the user has an emotion document in the emotions collection."""
     emotion_doc = emotions.find_one({"Name": username})
@@ -243,6 +207,7 @@ def ensure_emotion_data_for_user(username):
         })
 
 class User(flask_login.UserMixin):
+    """User class to maintain security and usage information across different accounts"""
     def __init__(self, user_doc):
         self.id = str(user_doc["_id"])
         self.username = user_doc["username"]
@@ -265,6 +230,7 @@ class User(flask_login.UserMixin):
 
 @login_manager.user_loader
 def user_loader(user_id):
+    """Loads the user if they exist"""
     user_doc = users.find_one({"_id": ObjectId(user_id)})
     if not user_doc:
         return
@@ -273,6 +239,7 @@ def user_loader(user_id):
 
 @login_manager.request_loader
 def request_loader(request):
+    """Requests to load a user if they exist"""
     username = request.form.get('username')
 
     if not username:

@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Webcam Feed is stupid</title>
-  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
   <div class="vid">
@@ -15,10 +15,10 @@
 <div class ="contain" id="boxes">
 
   <h1>Webcam Feed</h1>
-  
+
   <video id="video" autoplay playsinline width="640" height="480"></video>
 
-  
+
 
   <div class="box">
     <h3>Second Box</h3>
@@ -30,13 +30,10 @@
 </div>
 
     <div class="displays">
-  
-        <div class="box">
-          <h1>Detected Emotion</h1>
-          <span id="emojiDisplay" style="font-size: 2rem;">{{ emoji }}</span>
-        </div>
-      </div> <!--Webcam Container-->
-    </div> <!--Homepage Container-->
+
+        <button id="startBtn">Start Webcam</button>
+      </div>
+
 
 
     <script src="{{ url_for('static', filename='script.js') }}" defer></script>
