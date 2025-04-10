@@ -3,20 +3,18 @@ import os
 import sys
 from datetime import datetime
 
-import flask
 from flask import Flask, render_template, request, redirect, url_for, flash, session, jsonify
 import flask_login
-from flask_login import current_user, login_required
+from flask_login import current_user
 import pymongo
-from pymongo import MongoClient
 import certifi
 from bson.objectid import ObjectId
 from flask_cors import CORS
 from dotenv import load_dotenv
 
+# Get the absolute path to the parent directory
 parent_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.append(os.path.join(parent_dir, "machine-learning-client"))
-
 from ai import detect_emotion
 
 load_dotenv()
@@ -31,7 +29,7 @@ login_manager.login_view = "login"
 client = pymongo.MongoClient(os.getenv("MONGO_URI"), tlsCAFile=certifi.where())
 db = client[os.getenv("MONGO_DBNAME")]
 users = db.users
-emotions= db.Emotions 
+emotions = db.Emotions
 last_emotion = {"emotion": None, "start_time": datetime.utcnow()}
 
 CORS(app)
@@ -52,10 +50,10 @@ def login():
             user = User(user_doc)
             flask_login.login_user(user)
             session["user"] = user.id
-            ensure_emotion_data_for_user(username) 
+            ensure_emotion_data_for_user(username)
             return redirect(url_for("index"))
-        else:
-            flash("Invalid username or password", "danger")
+
+        flash("Invalid username or password", "danger")
     return render_template("login.html")
 
 @app.route("/index")
@@ -73,7 +71,6 @@ def index():
     emotion_doc = emotions.find_one({"Name": current_user.username})
     emoji = emotion_doc.get(current_emotion, "🤔") if emotion_doc and current_emotion else "🤔"
 
-
     return render_template("index.html", emoji=emoji)
 
 @app.route("/signup", methods=["GET", "POST"])
@@ -87,12 +84,12 @@ def signup():
             flash("Username and password are required", "danger")
             return redirect(url_for("signup"))
 
-        existing_user = users.find_one({"username": username}) # Check if user already exists
+        existing_user = users.find_one({"username": username})  # Check if user already exists
         if existing_user:
             flash("Username already taken", "warning")
             return redirect(url_for("signup"))
 
-        users.insert_one({ # Insert new user
+        users.insert_one({  # Insert new user
             "username": username,
             "password": password
         })
@@ -105,8 +102,8 @@ def signup():
         ensure_emotion_data_for_user(username)
 
         flash("Signup successful!", "success")
+        return redirect(url_for("index"))
 
-        return redirect(url_for("index"))  #this return was unreachable before
     return render_template("signup.html")
 
 @app.route("/submit-image", methods=["POST"])
@@ -136,7 +133,7 @@ def submit_image():
         emotions.update_one(
             {"Name": current_user.username},
             {"$inc": {f"{emotion}_count": 1}},
-            upsert=True  
+            upsert=True
         )
 
         return jsonify({"emotion": emotion, "emoji": emoji})
@@ -230,7 +227,7 @@ def request_loader(req):
         return None
     user_doc = users.find_one({"username": username})
 
-    if not user_doc: #user doesn't exist
+    if not user_doc:  # user doesn't exist
         return None
     return User(user_doc)
 
