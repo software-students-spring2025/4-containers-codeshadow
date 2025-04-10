@@ -1,6 +1,6 @@
-![Lint-free](https://github.com/nyu-software-engineering/containerized-app-exercise/actions/workflows/lint.yml/badge.svg)
-![WebApp CI] (https://github.com/software-students-spring2025/4-containers-codeshadow/actions/workflows/build.yml/badge.svg?branch=)
-![ML Client CI] (https://github.com/software-students-spring2025/4-containers-codeshadow/actions/workflows/build.yml/badge.svg?branch=)
+![Lint-free](https://github.com/nyu-software-engineering/containerized-app-exercise/actions/workflows/lint.yml/badge.svg) <br />
+![Web-App CI](https://github.com/software-students-spring2025/4-containers-codeshadow/actions/workflows/web-app.yml/badge.svg?branch=) <br />
+![ML-Client CI](https://github.com/software-students-spring2025/4-containers-codeshadow/actions/workflows/ml-client.yml/badge.svg?branch=) <br />
 
 # Containerized App Exercise
 
