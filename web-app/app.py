@@ -35,8 +35,7 @@ def submit_image():
     emotion = detect_emotion(base64_img)
     if emotion and emotion != last_emotion["emotion"]:
         duration = (datetime.utcnow() - last_emotion["start_time"]).total_seconds()
-        print(f"[{datetime.utcnow()}] 
-            Emotion changed from {last_emotion['emotion']} to {emotion} (lasted {duration} seconds)")
+        print(f"[{datetime.utcnow()}] {last_emotion['emotion']} to {emotion} (lasted {duration} seconds)")
         last_emotion["emotion"] = emotion
         last_emotion["start_time"] = datetime.utcnow()
 
