@@ -1,7 +1,6 @@
 """Emotion detection module using DeepFace and OpenCV."""
-
-from deepface import DeepFace
 import base64
+from deepface import DeepFace
 import cv2  # pylint: disable=no-member
 import numpy as np
 
