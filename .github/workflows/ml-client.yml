@@ -1,0 +1,35 @@
+name: ML Client CI
+
+on:
+  push:
+    paths:
+      - 'machine-learning-client/**'
+      - '.github/workflows/ml-client.yml'
+    branches: [main]
+  pull_request:
+    paths:
+      - 'machine-learning-client/**'
+      - '.github/workflows/ml-client.yml'
+
+jobs:
+  test-ml-client:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Build and run machine learning client container
+        run: |
+          docker build -t ml-client ./machine-learning-client
+          docker run -d --name ml-client-container ml-client
+
+      - name: Wait for ML client to be ready (optional)
+        run: sleep 5
+
+      - name: Run emotion detection test
+        run: |
+          docker exec ml-client-container python -c 'from ai import detect_emotion; print(detect_emotion("your_base64_image_here"))'
+
+      - name: Stop ML client container
+        run: docker stop ml-client-container

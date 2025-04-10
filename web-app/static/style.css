@@ -1,14 +1,13 @@
-
 .vid{
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
-    height: 100%;  /* Ensure the video takes the full height of the page */
-    object-fit: cover; /* This ensures the video fills the screen while maintaining aspect ratio */
+    height: 100%;
+    object-fit: cover;
     z-index: -1;  
-
 }
+
 h1 {
     position: absolute;
     top: 0;
@@ -18,6 +17,7 @@ h1 {
     z-index: 1;  
     color: white;
 }
+
 button{
     margin-top: 20px;
     padding: 10px 20px;
@@ -28,10 +28,17 @@ button{
     border: none;
     border-radius: 5px;
 }
-.video{
-    position:  absolute;
-    align-self: center;
+
+#video {
+    width: 640px;
+    height: 480px;
+    border: 2px solid #ccc;
+    border-radius: 10px;
+    background-color: #000;
+    margin: 20px auto;
+    display: block;
 }
+
 .box {
     width: 500px;
     height: 500px;
@@ -44,19 +51,37 @@ button{
     align-items: center;
     position: relative;
     flex-direction: column;
-  }
-  .contain {
-    display: none;
-    gap: 500px;
-    align-items: center;
-  }
-#startBtn{
-    margin: 0;     /* Removes default margin around the body */
-    display: flex; /* Enables flexbox layout */
-    position: fixed;
-    left: 700px;
-    top: 500px;
 }
+
+.contain {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    margin-top: 100px;
+}
+
+#startBtn{
+    margin: 20px auto;
+    display: block;
+    position: relative;
+    left: auto;
+    top: auto;
+}
+
 .emotions{
-display: none;
+    display: none;
+}
+
+.displays {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.sub-display {
+    display: flex;
+    flex-direction: column;
 }

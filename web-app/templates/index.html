@@ -16,21 +16,26 @@
 
   <h1>Webcam Feed</h1>
   
-  <video class="box" id="video" width="640" height="480" autoplay></video>
+  <video id="video" autoplay playsinline width="640" height="480"></video>
+
   
 
   <div class="box">
     <h3>Second Box</h3>
-    <p>Content goes here...</p>
+    <span id="emojiDisplay" style="font-size: 2rem;">{{ emoji }}</span>
   </div>
 </div>
-<div class=emotions id="Username">
-    <label>username :</label>
-    <input id="username">
-    <button id="namesubmit">submit</button>
+<div class="emotions" id="Username">
+  <p>Welcome, <strong>{{ current_user.username }}</strong>!</p>
 </div>
 
-<button id="startBtn">Start Webcam</button>
-<script src="{{ url_for('static', filename='script.js') }}"></script>
-</body>
+    <div class="displays">
+  
+        <button id="startBtn">Start Webcam</button>
+      </div>
+
+    
+
+    <script src="{{ url_for('static', filename='script.js') }}" defer></script>
+  </body>
 </html>

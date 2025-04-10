@@ -1,0 +1,35 @@
+name: Web App CI
+
+on:
+  push:
+    paths:
+      - 'web-app/**'
+      - '.github/workflows/web-app.yml'
+    branches: [main]
+  pull_request:
+    paths:
+      - 'web-app/**'
+      - '.github/workflows/web-app.yml'
+
+jobs:
+  test-web-app:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Build and run web-app container
+        run: |
+          docker build -t web-app ./web-app
+          docker run -d -p 5000:5000 --name web-app-container web-app
+
+      - name: Wait for Flask to start
+        run: sleep 5
+
+      - name: Test web app is running
+        run: |
+          curl -sSf http://localhost:5000 || (echo "Web app did not respond" && exit 1)
+
+      - name: Stop container
+        run: docker stop web-app-container
