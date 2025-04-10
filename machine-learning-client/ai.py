@@ -1,7 +1,8 @@
 """Emotion detection module using DeepFace and OpenCV."""
-import base64
+
 from deepface import DeepFace
-import cv2
+import base64
+import cv2  # pylint: disable=no-member
 import numpy as np
 
 def readb64(base64_string):
@@ -16,7 +17,7 @@ def detect_emotion(base64_image):
         img = readb64(base64_image)
         result = DeepFace.analyze(img, actions=['emotion'], enforce_detection=False)
         return result[0]['dominant_emotion']
-    except Exception as e:  # DeepFace may throw various errors, catch-all for stability
+    except Exception as e:
         print("Emotion detection error:", e)
         return None
 
