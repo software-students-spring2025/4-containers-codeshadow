@@ -73,3 +73,15 @@ button{
 .emotions{
     display: none;
 }
+
+.displays {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.sub-display {
+    display: flex;
+    flex-direction: column;
+}

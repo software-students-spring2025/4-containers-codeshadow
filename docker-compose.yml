@@ -1,0 +1,29 @@
+version: "3.11"
+
+services:
+  web:
+    build: ./web-app
+    ports:
+      - "5000:5000"
+    depends_on:
+      - mongo
+      - ml
+    environment:
+      - MONGO_URI=mongodb://mongo:27017
+      - MONGO_DBNAME=CodeShadow
+      - SECRET_KEY=<key>
+
+  ml:
+    build: ./machine-learning-client
+    ports:
+      - "6000:6000"
+
+  mongo:
+    image: mongo
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+
+volumes:
+  mongo_data:

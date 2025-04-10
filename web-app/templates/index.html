@@ -1,38 +1,38 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Webcam Feed is stupid</title>
-  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-</head>
-<body>
-  <div class="vid">
-    <video  autoplay muted loop>
-        <source src="static/vid1.mp4" type="video/mp4">
-    </video> 
-  </div>
-<div class ="contain" id="boxes">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Webcam Feed is stupid</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  </head>
 
-  <h1>Webcam Feed</h1>
-  
-  <video id="video" autoplay playsinline width="640" height="480"></video>
+  <body>
+    <div class="vid">
+      <video autoplay muted loop>
+        <source src="{{ url_for('static', filename='vid1.mp4') }}" type="video/mp4">
+      </video> 
+    </div>
 
-  
+    <h1>Webcam to Emoji</h1>
 
-  <div class="box">
-    <h3>Second Box</h3>
-    <p>Content goes here...</p>
-  </div>
-</div>
-<div class=emotions id="Username">
-    <label>username :</label>
-    <input id="username">
-    <button id="namesubmit">submit</button>
-</div>
+    <div class="emotions" id="Username">
+      <p>Welcome, <strong>{{ current_user.username }}</strong>!</p>
+    </div>
 
-<button id="startBtn">Start Webcam</button>
-<script src="{{ url_for('static', filename='script.js') }}"></script>
-<script src="script.js" defer></script>
-</body>
+    <div class="displays">
+      <div class="sub-display">
+        <h3>Webcam Feed</h3>
+        <video id="video" autoplay playsinline width="640" height="480"></video>
+        <button id="startBtn">Start Webcam</button>
+      </div>
+
+      <div class="box">
+        <h3>Emotion Results</h3>
+        <p id="emotion-box">Your emotions are displayed here!</p>
+      </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='script.js') }}" defer></script>
+  </body>
 </html>
