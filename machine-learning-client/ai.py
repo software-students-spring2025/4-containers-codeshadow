@@ -1,5 +1,5 @@
-from deepface import DeepFace
 import base64
+from deepface import DeepFace
 import cv2
 import numpy as np
 
