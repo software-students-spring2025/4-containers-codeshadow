@@ -3,7 +3,16 @@
 import os
 import sys
 from datetime import datetime
-from flask import Flask, render_template, request, redirect, url_for, flash, session, jsonify
+from flask import (
+    Flask,
+    render_template,
+    request,
+    redirect,
+    url_for,
+    flash,
+    session,
+    jsonify,
+)
 import flask_login
 from flask_login import current_user
 import pymongo
@@ -11,10 +20,11 @@ import certifi
 from bson.objectid import ObjectId
 from flask_cors import CORS
 from dotenv import load_dotenv
+
 # Get the absolute path to the parent directory
 parent_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.append(os.path.join(parent_dir, "machine-learning-client"))
-from ai import detect_emotion # pylint: disable=import-error, wrong-import-position
+from ai import detect_emotion  # pylint: disable=import-error, wrong-import-position
 
 load_dotenv()
 
@@ -33,12 +43,13 @@ last_emotion = {"emotion": None, "start_time": datetime.utcnow()}
 
 CORS(app)
 
-@app.route("/", methods=['GET', 'POST'])
+
+@app.route("/", methods=["GET", "POST"])
 def login():
     """Login function to allow entry to users who have an account or need to sign up"""
-    if request.method == 'POST':
-        username = request.form.get('username')
-        entered_pw = request.form.get('password')
+    if request.method == "POST":
+        username = request.form.get("username")
+        entered_pw = request.form.get("password")
 
         if not username or not entered_pw:
             flash("Username and password are required", "danger")
@@ -55,6 +66,7 @@ def login():
         flash("Invalid username or password", "danger")
     return render_template("login.html")
 
+
 @app.route("/index")
 def index():
     """Render the homepage."""
@@ -68,9 +80,14 @@ def index():
 
     # Get the emoji for that emotion
     emotion_doc = emotions.find_one({"Name": current_user.username})
-    emoji = emotion_doc.get(current_emotion, "🤔") if emotion_doc and current_emotion else "🤔"
+    emoji = (
+        emotion_doc.get(current_emotion, "🤔")
+        if emotion_doc and current_emotion
+        else "🤔"
+    )
 
     return render_template("index.html", emoji=emoji)
+
 
 @app.route("/signup", methods=["GET", "POST"])
 def signup():
@@ -83,15 +100,16 @@ def signup():
             flash("Username and password are required", "danger")
             return redirect(url_for("signup"))
 
-        existing_user = users.find_one({"username": username})  # Check if user already exists
+        existing_user = users.find_one(
+            {"username": username}
+        )  # Check if user already exists
         if existing_user:
             flash("Username already taken", "warning")
             return redirect(url_for("signup"))
 
-        users.insert_one({  # Insert new user
-            "username": username,
-            "password": password
-        })
+        users.insert_one(
+            {"username": username, "password": password}  # Insert new user
+        )
 
         user_doc = users.find_one({"username": username})  # fetch the user again
         user = User(user_doc)
@@ -104,6 +122,7 @@ def signup():
         return redirect(url_for("index"))
 
     return render_template("signup.html")
+
 
 @app.route("/submit-image", methods=["POST"])
 def submit_image():
@@ -132,11 +151,12 @@ def submit_image():
         emotions.update_one(
             {"Name": current_user.username},
             {"$inc": {f"{emotion}_count": 1}},
-            upsert=True
+            upsert=True,
         )
 
         return jsonify({"emotion": emotion, "emoji": emoji})
     return jsonify({"emotion": "unknown", "emoji": "🤔"})
+
 
 @app.route("/track")
 def track():
@@ -156,10 +176,11 @@ def track():
         "happy": emotion_doc.get("happy_count", 0),
         "neutral": emotion_doc.get("neutral_count", 0),
         "sad": emotion_doc.get("sad_count", 0),
-        "surprise": emotion_doc.get("surprise_count", 0)
+        "surprise": emotion_doc.get("surprise_count", 0),
     }
     # Render the tracker page and pass the emotion summary data
     return render_template("tracker.html", emotion_summary=emotion_summary)
+
 
 DEFAULT_EMOTION_DATA = {
     "anger": "😡",
@@ -175,20 +196,20 @@ DEFAULT_EMOTION_DATA = {
     "happy_count": 0,
     "neutral_count": 0,
     "sad_count": 0,
-    "surprise_count": 0
+    "surprise_count": 0,
 }
+
 
 def ensure_emotion_data_for_user(username):
     """Ensure the user has an emotion document in the emotions collection."""
     emotion_doc = emotions.find_one({"Name": username})
     if not emotion_doc:
-        emotions.insert_one({
-            "Name": username,
-            **DEFAULT_EMOTION_DATA
-        })
+        emotions.insert_one({"Name": username, **DEFAULT_EMOTION_DATA})
+
 
 class User(flask_login.UserMixin):
     """User class to maintain security and usage information across different accounts"""
+
     def __init__(self, user_doc):
         self.id = str(user_doc["_id"])
         self.username = user_doc["username"]
@@ -209,6 +230,7 @@ class User(flask_login.UserMixin):
     def get_id(self):
         return self.id
 
+
 @login_manager.user_loader
 def user_loader(user_id):
     """Loads the user if they exist"""
@@ -217,10 +239,11 @@ def user_loader(user_id):
         return None
     return User(user_doc)
 
+
 @login_manager.request_loader
 def request_loader(req):
     """Requests to load a user if they exist"""
-    username = req.form.get('username')
+    username = req.form.get("username")
 
     if not username:
         return None
@@ -229,6 +252,7 @@ def request_loader(req):
     if not user_doc:  # user doesn't exist
         return None
     return User(user_doc)
+
 
 if __name__ == "__main__":
     app.run(debug=True)
