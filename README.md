@@ -10,11 +10,7 @@
 [Oluwapelumi Adesiyan](https://github.com/oadesiyan) <br />
 [Naseem Uddin](https://github.com/naseem-student) <br />
 [Jibril Wague](https://github.com/Jibril1010) <br />
-<<<<<<< HEAD
-[Brandon Morales](https://github.com/Bamoeq)<br />
-=======
 [Brandon Morales](https://github.com/bamoeq) <br /> 
->>>>>>> b8027073a97666632fa39ddaf8da5f67fa58c9e7
 
 ## Configuration Instructions
 
