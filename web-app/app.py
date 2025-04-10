@@ -3,11 +3,6 @@
 import os
 import sys
 from datetime import datetime
-# Get the absolute path to the parent directory
-parent_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-sys.path.append(os.path.join(parent_dir, "machine-learning-client"))
-from ai import detect_emotion # pylint: disable=import-error
-
 from flask import Flask, render_template, request, redirect, url_for, flash, session, jsonify
 import flask_login
 from flask_login import current_user
@@ -16,6 +11,10 @@ import certifi
 from bson.objectid import ObjectId
 from flask_cors import CORS
 from dotenv import load_dotenv
+# Get the absolute path to the parent directory
+parent_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.append(os.path.join(parent_dir, "machine-learning-client"))
+from ai import detect_emotion # pylint: disable=import-error
 
 load_dotenv()
 
