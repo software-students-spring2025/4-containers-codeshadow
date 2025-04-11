@@ -1,185 +1,180 @@
 * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-  }
-  
-  body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background-color: #f4f4f4;
-    min-height: 100vh;
-  }
-  
-  nav {
-    position: fixed;
-    top: 0;
-    width: 100%;
-    background-color: rgba(0, 0, 0, 0.7);
-    padding: 10px;
-    text-align: center;
-    z-index: 10;
-  }
-  
-  nav a {
-    color: white;
-    margin: 0 15px;
-    text-decoration: none;
-    font-weight: bold;
-  }
-  
-  nav a.active {
-    text-decoration: underline;
-  }
-  
-  .container {
-    max-width: 400px;
-    margin: 100px auto;
-    padding: 30px;
-    background: white;
-    border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0,0,0,0.1);
-    text-align: center;
-  }
-  
-  label {
-    display: block;
-    text-align: left;
-    margin-bottom: 5px;
-    font-weight: bold;
-  }
-  
-  input {
-    width: 100%;
-    padding: 10px;
-    margin-bottom: 15px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-  }
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
 
- select, textarea {
-    padding: 10px;
-    width: 80%;
-    margin-bottom: 10px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-  }
-  
-  button {
-    padding: 10px 20px;
-    font-size: 1.1em;
-    background-color: #007BFF;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    margin: 20px auto;
-    display: block;
-  }
-  
-  button:hover {
-    background-color: #0056b3;
-  }
-  
-  .alert {
-    padding: 10px;
-    margin-top: 15px;
-    border-radius: 4px;
-    text-align: center;
-  }
-  
-  .alert-danger {
-    background-color: #f8d7da;
-    color: #842029;
-  }
-  
-  .alert-success {
-    background-color: #d1e7dd;
-    color: #0f5132;
-  }
-  
-  .alert-warning {
-    background-color: #fff3cd;
-    color: #664d03;
-  }
-  
-  /* === Webcam Page (index.html) === */
-  .vid {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    z-index: -1;
-  }
-  
-  .homePage {
-    position: relative;
-    width: 100%;
-    padding-top: 70px;
-  }
-  
-  .userHome h1 {
-    color: white;
-    text-align: center;
-    margin: 20px;
-    text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.7);
-  }
-  
-  #username {
-    margin-bottom: 20px;
-  }
-  
-  #video {
-    width: 640px;
-    height: 480px;
-    border: 2px solid #ccc;
-    border-radius: 10px;
-    background-color: #000;
-    margin: 20px auto;
-    display: block;
-  }
-  
-  .box {
-    width: 500px;
-    height: 500px;
-    border: 2px solid #ccc;
-    background-color: aqua;
-    border-radius: 10px;
-    overflow: hidden;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    position: relative;
-    flex-direction: column;
-  }
-  
-  .contain,
-    #boxes {
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    align-items: flex-start;
-    gap: 20px;
-    }
-    
-  #startBtn {
-    margin: 20px auto;
-    display: block;
-  }
-  
-  .emotions {
-    display: none;
-  }
-  
-  .displays {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-  }
-  
-  .sub-display {
-    display: flex;
-    flex-direction: column;
-  }
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f4f4f4;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+nav {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  background-color: rgba(0, 0, 0, 0.7);
+  padding: 10px;
+  text-align: center;
+  z-index: 10;
+}
+
+nav a {
+  color: white;
+  margin: 0 15px;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+nav a.active {
+  text-decoration: underline;
+}
+
+.container {
+  max-width: 400px;
+  margin: 100px auto;
+  padding: 30px;
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+  text-align: center;
+}
+
+label {
+  display: block;
+  text-align: left;
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+input, select, textarea {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 15px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+button {
+  padding: 10px 15px;
+  background-color: #5C6BC0;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin: 20px auto;
+  display: block;
+}
+
+button:hover {
+  background-color: #3f4b8a;
+}
+
+/* Alert Messages */
+.alert {
+  padding: 10px;
+  margin-top: 15px;
+  border-radius: 4px;
+  text-align: center;
+}
+
+.alert-danger {
+  background-color: #f8d7da;
+  color: #842029;
+}
+
+.alert-success {
+  background-color: #d1e7dd;
+  color: #0f5132;
+}
+
+.alert-warning {
+  background-color: #fff3cd;
+  color: #664d03;
+}
+
+/* === Webcam Page (index.html) === */
+.vid {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: -1;
+}
+
+.homePage {
+  position: relative;
+  width: 100%;
+  padding-top: 70px;
+}
+
+.userHome h1 {
+  color: white;
+  text-align: center;
+  margin: 20px;
+  text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.7);
+}
+
+#username {
+  margin-bottom: 20px;
+}
+
+#video {
+  width: 640px;
+  height: 480px;
+  border: 2px solid #ccc;
+  border-radius: 10px;
+  background-color: #000;
+  margin: 20px auto;
+  display: block;
+}
+
+.box {
+  width: 500px;
+  height: 500px;
+  border: 2px solid #ccc;
+  background-color: aqua;
+  border-radius: 10px;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  flex-direction: column;
+}
+
+.contain,
+#boxes {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 20px;
+}
+
+#startBtn {
+  margin: 20px auto;
+  display: block;
+}
+
+.emotions {
+  display: none;
+}
+
+.displays {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.sub-display {
+  display: flex;
+  flex-direction: column;
+}
