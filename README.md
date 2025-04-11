@@ -78,15 +78,7 @@ You can find our project board linked [here](https://github.com/orgs/software-st
    cd web-app
    pipenv install
    pipenv shell
-   python app.py
-   ```
-
-2. **Machine Learning Client Development**
-   ```bash
-   cd machine-learning-client
-   pipenv install
-   pipenv shell
-   python -m pytest
+   pytest tests/test_web_app.pyg
    ```
 
 ### Testing
