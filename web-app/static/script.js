@@ -3,6 +3,7 @@ const startBtn = document.querySelector("#startBtn");
 const container = document.querySelector(".contain");
 
 const emojiDisplay = document.querySelector("#emojiDisplay");
+const box = document.querySelector(".box")
 
 startBtn.addEventListener("click", () => {
     navigator.mediaDevices.getUserMedia({ video: true })
@@ -43,7 +44,8 @@ function captureAndSendImage(videoElement) {
     .then(data => {
         if (data.emotion && data.emoji) {
             console.log("Emotion Detected:", data.emotion);
-            emojiDisplay.innerHTML = `Your current emotion: <span style="font-size: 2rem;">${data.emoji}</span>`;
+            emojiDisplay.innerHTML = ` <span style="font-size: 8rem;">${data.emoji}</span>`;
+            changeBackgroundColor(data.emotion);
         } else {
             emojiDisplay.innerHTML = `Could not detect emotion 😕`;
         }
@@ -73,3 +75,24 @@ async function sendImageToServer(base64Image) {
     }
   }
   
+  function changeBackgroundColor(emotion) {
+    switch (emotion.toLowerCase()) {
+        case 'happy':
+            box.style.backgroundColor = 'yellow';
+            break;
+        case 'sad':
+            box.style.backgroundColor = 'blue';
+            break;
+        case 'angry':
+            box.style.backgroundColor = 'red';
+            break;
+        case 'surprised':
+            box.style.backgroundColor = 'orange';
+            break;
+        case 'neutral':
+            box.style.backgroundColor = 'gray';
+            break;
+        default:
+            box.style.backgroundColor = 'aqua'; 
+    }
+}
