@@ -43,7 +43,7 @@ function captureAndSendImage(videoElement) {
     .then(data => {
         if (data.emotion && data.emoji) {
             console.log("Emotion Detected:", data.emotion);
-            emojiDisplay.innerHTML = `Your current emotion: <span style="font-size: 2rem;">${data.emoji}</span>`;
+            emojiDisplay.innerHTML = ` <span style="font-size: 8rem;">${data.emoji}</span>`;
         } else {
             emojiDisplay.innerHTML = `Could not detect emotion 😕`;
         }
