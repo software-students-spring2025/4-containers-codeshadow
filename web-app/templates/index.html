@@ -8,34 +8,38 @@
 </head>
 <body>
   <div class="vid">
-    <video  autoplay muted loop>
+    <video autoplay muted loop>
         <source src="static/vid1.mp4" type="video/mp4">
     </video> 
   </div>
-<!-- Wrap both boxes in one container -->
-<div class="contain" id="boxes">
 
-  <!-- Box 1 -->
-  <div >
-    <h1>Webcam Feed</h1>
-    <video id="video" autoplay playsinline width="540" height="=550"></video>
+  <nav>
+    <a href="{{ url_for('index') }}" class="{{ 'active' if request.endpoint == 'index' else '' }}">Webcam</a>
+    <a href="{{ url_for('track') }}" class="{{ 'active' if request.endpoint == 'track' else '' }}">Emotion Tracker</a>
+  </nav>
+
+  <div class="homePage">
+    {% if current_user.is_authenticated %}
+      <div id="username">
+        <h1>Welcome, <strong>{{ current_user.username }}</strong>!</h1>
+      </div>
+    {% endif %}
+
+    <div class="contain" id="boxes">
+      <div>
+        <video id="video" autoplay playsinline></video>
+      </div>
+
+      <div class="box">
+        <span id="emojiDisplay" style="font-size: 8rem;">{{ emoji }}</span>
+      </div>
+    </div>
+
+    <div class="displays">
+      <button id="startBtn">Start Webcam</button>
+    </div>
   </div>
 
-  <!-- Box 2 -->
-  <div class="box">
-    <span id="emojiDisplay" style="font-size: 8rem;">{{ emoji }}</span>
-  </div>
-
-</div>
-
-<div class="emotions" id="Username">
-  <p>Welcome, <strong>{{ current_user.username }}</strong>!</p>
-</div>
-
-<div class="displays">
-  <button id="startBtn">Start Webcam</button>
-</div>
-
-    <script src="{{ url_for('static', filename='script.js') }}" defer></script>
-  </body>
+  <script src="{{ url_for('static', filename='script.js') }}" defer></script>
+</body>
 </html>
