@@ -47,7 +47,7 @@ jobs:
 
       - name: Run tests inside ml-client container
         run: |
-          docker-compose exec -T ml pytest /app/test
+          docker-compose exec -T ml pytest /app/tests
 
       - name: Shut down containers
         run: docker-compose down

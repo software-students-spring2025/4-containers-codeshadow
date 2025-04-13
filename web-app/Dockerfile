@@ -3,6 +3,7 @@ FROM python:3.11-slim
 ENV PYTHONPATH=/app
 
 WORKDIR /app
+COPY . /app
 
 RUN apt-get update && apt-get install -y \
     libgl1-mesa-glx \
