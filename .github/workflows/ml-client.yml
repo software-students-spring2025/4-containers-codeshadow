@@ -37,14 +37,6 @@ jobs:
           echo "MONGO_DBNAME=${{ secrets.MONGO_DBNAME }}" >> .env
           echo "SECRET_KEY=${{ secrets.SECRET_KEY }}" >> .env
 
-      - name: Create .env file
-        run: |
-          echo "FLASK_ENV=development" >> .env
-          echo "FLASK_PORT=5000" >> .env
-          echo "DEBUG=True" >> .env
-          echo "MONGO_URI=${{ secrets.MONGO_URI }}" >> .env
-          echo "MONGO_DBNAME=${{ secrets.MONGO_DBNAME }}" >> .env
-          echo "SECRET_KEY=${{ secrets.SECRET_KEY }}" >> .env
       - name: Build and start ml-client container
         run: docker-compose up -d --build ml
 
