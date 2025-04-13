@@ -4,13 +4,14 @@ on:
   push:
     paths:
       - 'ml-client/**'
+      - 'ai.py'
+      - 'requirements.txt'
       - '.github/workflows/ml-client.yml'
-      - 'docker-compose.yml'
+  
   pull_request:
     paths:
       - 'machine-learning-client/**'
       - '.github/workflows/ml-client.yml'
-      - 'docker-compose.yml'
       
 jobs:
   docker-test:
