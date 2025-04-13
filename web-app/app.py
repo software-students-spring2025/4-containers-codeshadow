@@ -145,17 +145,10 @@ def submit_image():
         return jsonify({"error": "No image provided"}), 400
 
     try:
-        response = requests.post(
-            'http://ml:6000/detect',
-            json={'image': base64_img}
-        )
-        response.raise_for_status()
-        result = response.json()
-        emotion = result.get('emotion')
+        emotion = detect_emotion(base64_img)
     except Exception as e:
         print(f"Error detecting emotion: {e}")
         return jsonify({"emotion": "unknown", "emoji": "🤔"})
-
     if emotion:
         # Get the emoji from the DB (or fallback to mapping)
         emoji_doc = emotions.find_one({"Name": current_user.username})

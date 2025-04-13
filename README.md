@@ -111,9 +111,9 @@ If you encounter any issues:
 - Accessible to both the web app and the ML client
 
 ### Testing
-- Run tests for web app: `cd web-app && pipenv run pytest`
-- Run tests for ML client: `cd machine-learning-client && pipenv run pytest`
-- Code coverage must be maintained above 80%
+- Run tests for web app and ML: `cd web-app && python -m pytest tests/test_web_app.py`
+This will run 5 tests that check our homepage, login/signup, database changing with emotions, error checking fields of the signup/login, and error checking for no camera. Altogether testing allows us to know our code is running successfully. 
+
 
 ### Continuous Integration
 - GitHub Actions workflows for both the web app and the ML client
