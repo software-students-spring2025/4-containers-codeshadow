@@ -185,7 +185,7 @@ def track():
 
     # Prepare the data to display on the tracker page
     emotion_summary = {
-        "anger": emotion_doc.get("anger_count", 0),
+        "angry": emotion_doc.get("anger_count", 0),
         "disgust": emotion_doc.get("disgust_count", 0),
         "fear": emotion_doc.get("fear_count", 0),
         "happy": emotion_doc.get("happy_count", 0),
@@ -198,14 +198,14 @@ def track():
 
 
 DEFAULT_EMOTION_DATA = {
-    "anger": "😡",
+    "angry": "😡",
     "disgust": "🤢",
     "fear": "😖",
     "happy": "😂",
     "neutral": "😑",
     "sad": "🥲",
     "surprise": "😱",
-    "anger_count": 0,
+    "angry_count": 0,
     "disgust_count": 0,
     "fear_count": 0,
     "happy_count": 0,
