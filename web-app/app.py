@@ -3,6 +3,7 @@
 import os
 import sys
 from datetime import datetime
+import requests
 from flask import (
     Flask,
     render_template,
@@ -21,11 +22,6 @@ from bson.objectid import ObjectId
 from flask_cors import CORS
 from dotenv import load_dotenv
 
-# Get the absolute path to the parent directory
-parent_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-sys.path.append(os.path.join(parent_dir, "machine_learning_client"))
-from ai import detect_emotion  # pylint: disable=import-error, wrong-import-position
-
 load_dotenv()
 
 app = Flask(__name__)
@@ -35,35 +31,50 @@ login_manager = flask_login.LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = "login"
 
-client = pymongo.MongoClient(os.getenv("MONGO_URI"), tlsCAFile=certifi.where())
+client = pymongo.MongoClient(os.getenv("MONGO_URI"))
 db = client[os.getenv("MONGO_DBNAME")]
 users = db.users
 emotions = db.Emotions
 last_emotion = {"emotion": None, "start_time": datetime.utcnow()}
 
-CORS(app)
+# Configure CORS to allow access from localhost
+CORS(app, resources={
+    r"/*": {
+        "origins": ["http://localhost:5000", "http://127.0.0.1:5000"],
+        "methods": ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+        "allow_headers": ["Content-Type", "Authorization"]
+    }
+})
 
 
 @app.route("/", methods=["GET", "POST"])
 def login():
     """Login function to allow entry to users who have an account or need to sign up"""
+    # Check if any users exist, if not create a default user
+    if users.count_documents({}) == 0:
+        default_user = {
+            "username": "admin",
+            "password": "admin123",  # In a real app, this should be hashed
+            "email": "admin@example.com"
+        }
+        users.insert_one(default_user)
+        print("Created default user: admin/admin123")
+
     if request.method == "POST":
         username = request.form.get("username")
         entered_pw = request.form.get("password")
 
         if not username or not entered_pw:
-            flash("Username and password are required", "danger")
+            flash("Please enter both username and password")
             return redirect(url_for("login"))
 
-        user_doc = users.find_one({"username": username})
-        if user_doc and (entered_pw == user_doc["password"]):
-            user = User(user_doc)
-            flask_login.login_user(user)
-            session["user"] = user.id
-            ensure_emotion_data_for_user(username)
+        user = users.find_one({"username": username})
+        if user and user["password"] == entered_pw:
+            user_obj = User(user)
+            flask_login.login_user(user_obj)
             return redirect(url_for("index"))
 
-        flash("Invalid username or password", "danger")
+        flash("Invalid username or password")
     return render_template("login.html")
 
 
@@ -133,21 +144,24 @@ def submit_image():
     if not base64_img:
         return jsonify({"error": "No image provided"}), 400
 
-    emotion = detect_emotion(base64_img)
+    try:
+        response = requests.post(
+            'http://ml:6000/detect',
+            json={'image': base64_img}
+        )
+        response.raise_for_status()
+        result = response.json()
+        emotion = result.get('emotion')
+    except Exception as e:
+        print(f"Error detecting emotion: {e}")
+        return jsonify({"emotion": "unknown", "emoji": "🤔"})
 
     if emotion:
-        if emotion != last_emotion["emotion"]:
-            duration = (datetime.utcnow() - last_emotion["start_time"]).total_seconds()
-            print(
-                f"[{datetime.utcnow()}] {last_emotion['emotion']} to {emotion} "
-                f"(lasted {duration} seconds)"
-            )
-            last_emotion["emotion"] = emotion
-            last_emotion["start_time"] = datetime.utcnow()
+        # Get the emoji from the DB (or fallback to mapping)
+        emoji_doc = emotions.find_one({"Name": current_user.username})
+        emoji = emoji_doc.get(emotion, DEFAULT_EMOTION_DATA.get(emotion, "🤔")) if emoji_doc else "🤔"
 
-        emotion_doc = emotions.find_one({"Name": current_user.username})
-        emoji = emotion_doc.get(emotion, "🤔") if emotion_doc else "🤔"
-
+        # Update emotion count in DB
         emotions.update_one(
             {"Name": current_user.username},
             {"$inc": {f"{emotion}_count": 1}},
@@ -155,6 +169,7 @@ def submit_image():
         )
 
         return jsonify({"emotion": emotion, "emoji": emoji})
+
     return jsonify({"emotion": "unknown", "emoji": "🤔"})
 
 
@@ -253,6 +268,49 @@ def request_loader(req):
         return None
     return User(user_doc)
 
+@app.route('/detect', methods=['POST'])
+def detect():
+    """Handle image upload and emotion detection."""
+    if 'image' not in request.files:
+        print("No image key in request.files")
+        return jsonify({'error': 'No image provided'}), 400
+
+    image_file = request.files['image']
+    if not image_file:
+        print("Image file is empty")
+        return jsonify({'error': 'Empty image file'}), 400
+
+    try:
+        image_data = image_file.read()
+        print(f"Received image bytes: {len(image_data)}")
+
+        base64_image = base64.b64encode(image_data).decode('utf-8')
+        base64_image = f"data:image/jpeg;base64,{base64_image}"
+
+        emotion = detect_emotion(base64_image)
+        print("Detected emotion:", emotion)
+
+        if emotion:
+            return jsonify({'emotion': emotion})
+        return jsonify({'error': 'Could not detect emotion'}), 400
+    except Exception as e:
+        print("Unexpected error in /detect:", e)
+        return jsonify({'error': str(e)}), 500
+
+def detect_emotion(base64_image):
+    """Detect emotion by sending base64 image to the ML container."""
+    try:
+        response = requests.post(
+            'http://ml:6000/detect',
+            json={'image': base64_image},
+            timeout=10
+        )
+        response.raise_for_status()
+        return response.json().get('emotion')
+    except Exception as e:
+        print(f"Error detecting emotion: {e}")
+        return None
+
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(host='0.0.0.0', port=5001, debug=True)
