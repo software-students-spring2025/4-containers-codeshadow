@@ -2,13 +2,11 @@ name: ML Client CI
 
 on:
   push:
-    branches: [main]
     paths:
       - 'ml-client/**'
       - '.github/workflows/ml-client.yml'
       - 'docker-compose.yml'
   pull_request:
-    branches: [main]
     paths:
       - 'machine-learning-client/**'
       - '.github/workflows/ml-client.yml'
@@ -24,7 +22,7 @@ jobs:
 
       - name: Set up Docker
         uses: docker/setup-buildx-action@v3
-        
+
       - name: Build and start ml-client container
         run: docker-compose up -d --build ml
 
