@@ -145,17 +145,10 @@ def submit_image():
         return jsonify({"error": "No image provided"}), 400
 
     try:
-        response = requests.post(
-            'http://ml:6000/detect',
-            json={'image': base64_img}
-        )
-        response.raise_for_status()
-        result = response.json()
-        emotion = result.get('emotion')
+        emotion = detect_emotion(base64_img)
     except Exception as e:
         print(f"Error detecting emotion: {e}")
         return jsonify({"emotion": "unknown", "emoji": "🤔"})
-
     if emotion:
         # Get the emoji from the DB (or fallback to mapping)
         emoji_doc = emotions.find_one({"Name": current_user.username})
@@ -185,7 +178,7 @@ def track():
 
     # Prepare the data to display on the tracker page
     emotion_summary = {
-        "anger": emotion_doc.get("anger_count", 0),
+        "angry": emotion_doc.get("anger_count", 0),
         "disgust": emotion_doc.get("disgust_count", 0),
         "fear": emotion_doc.get("fear_count", 0),
         "happy": emotion_doc.get("happy_count", 0),
@@ -198,14 +191,14 @@ def track():
 
 
 DEFAULT_EMOTION_DATA = {
-    "anger": "😡",
+    "angry": "😡",
     "disgust": "🤢",
     "fear": "😖",
     "happy": "😂",
     "neutral": "😑",
     "sad": "🥲",
     "surprise": "😱",
-    "anger_count": 0,
+    "angry_count": 0,
     "disgust_count": 0,
     "fear_count": 0,
     "happy_count": 0,

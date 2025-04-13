@@ -1,5 +1,5 @@
 import pytest
-
+import app
 from app import users, emotions
 from bson.objectid import ObjectId
 
@@ -38,7 +38,10 @@ def test_submit_image_with_emotion(client, monkeypatch):
     password = "123"
     client.post("/signup", data={"username": username, "password": password}, follow_redirects=True)
 
-    monkeypatch.setattr("app.detect_emotion", lambda x: "happy")
+    # Log in the user
+    client.post("/", data={"username": username, "password": password}, follow_redirects=True)
+
+    monkeypatch.setattr(app, "detect_emotion", lambda x: "happy")
 
     res = client.post("/submit-image", json={"image": "fakebase64img"})
     data = res.get_json()
