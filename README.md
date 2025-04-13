@@ -3,11 +3,11 @@
 ![ML-Client CI](https://github.com/software-students-spring2025/4-containers-codeshadow/actions/workflows/ml-client.yml/badge.svg?branch=)
 
 ## App Description
-This is an emotion detector and tracker app. The purpose of this project is to digitize and store data about how often a person sitting behind their computer changes their emotions and maintains a single emotion during their screen time. It's a fun and interesting way to understand yourself better and learn more about how you act in certain scenarios. We believe that this could be taken to higher levels by being utilized in professional interviews and teaching courses over online sessions. It would help organizers of online events better understand their participants' reactions and attention to what is being discussed within the session.
+This is an emotion detector and tracker app. This project aims to digitize and store data about how often a person sitting behind their computer changes their emotions and maintains a single emotion during their screen time. It's a fun and engaging way to understand yourself better and learn more about how you act in certain scenarios. We believe that this could be taken to higher levels by being utilized in professional interviews and teaching courses over online sessions. It would help organizers of online events better understand their participants' reactions and attention to what is being discussed within the session.
 
 ## Prerequisites
 
-- Docker and Docker Compose installed on your system
+- Docker and Docker Compose are installed on your system
 - Python 3.x (if running locally without Docker)
 - Git
 
@@ -19,12 +19,12 @@ This is an emotion detector and tracker app. The purpose of this project is to d
 │   ├── app.py                # Main application file
 │   ├── requirements.txt      # Python dependencies
 │   ├── templates/            # HTML templates
+│   └── .env                  # Environment Variables for MongoDB (app.py usage)
 │   └── static/               # Static files (CSS, JS, images)
 ├── machine-learning-client/  # ML service
 │   ├── ai.py                 # ML service implementation
 │   └── requirements.txt      # ML service dependencies
-│   └── .env                  # Enviornment Variables for MongoDB (app.py usage)
-├── .env                      # Enviornment Variables for MongoDB (docker usage)
+├── .env                      # Environment Variables for MongoDB (docker usage)
 └── docker-compose.yml        # Docker configuration
 ```
 
@@ -47,7 +47,7 @@ This is an emotion detector and tracker app. The purpose of this project is to d
      SECRET_KEY=<your_secret_key>
      ```
    - Copy the .env file within your web-app folder and paste it into the .env folder
-   - Note: You should have two .env files one in web-app folder and one in root directory 4-containers-codeshadow
+   - Note: You should have two .env files, one in the web-app folder and one in the root directory 4-containers-codeshadow
 
 3. Build and start the containers:
    ```bash
@@ -97,7 +97,7 @@ If you encounter any issues:
 - Located in the `web-app` directory
 - Built with Flask
 - Handles user authentication and emotion tracking
-- Provides web interface for emotion visualization
+- Provides a web interface for emotion visualization
 
 #### Machine Learning Client
 - Located in the `machine-learning-client` directory
@@ -108,7 +108,7 @@ If you encounter any issues:
 #### Database
 - MongoDB container
 - Stores user data and emotion tracking information
-- Accessible to both web app and ML client
+- Accessible to both the web app and the ML client
 
 ### Testing
 - Run tests for web app: `cd web-app && pipenv run pytest`
@@ -116,6 +116,6 @@ If you encounter any issues:
 - Code coverage must be maintained above 80%
 
 ### Continuous Integration
-- GitHub Actions workflows for both web app and ML client
+- GitHub Actions workflows for both the web app and the ML client
 - Automatic linting and testing on pull requests
-- Status badges displayed at the top of this README
+- Status badges are displayed at the top of this README
