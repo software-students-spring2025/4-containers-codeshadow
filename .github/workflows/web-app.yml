@@ -2,34 +2,50 @@ name: Web App CI
 
 on:
   push:
+    branches: [main]
     paths:
       - 'web-app/**'
+      - 'web-app.py'
+      - 'requirements.txt'
       - '.github/workflows/web-app.yml'
-    branches: [main]
+  
   pull_request:
     paths:
       - 'web-app/**'
       - '.github/workflows/web-app.yml'
 
 jobs:
-  test-web-app:
+  build-and-test:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-      - name: Build and run web-app container
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: 3.11
+      
+      - name: Install dependencies
         run: |
-          docker build -t web-app ./web-app
-          docker run -d -p 5000:5000 --name web-app-container web-app
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install pytest
 
-      - name: Wait for Flask to start
-        run: sleep 5
+      - name: Set up Docker
+        uses: docker/setup-buildx-action@v3
 
-      - name: Test web app is running
+      - name: Build and start containers
+        run: docker-compose up -d --build
+
+      - name: Wait for services to be ready
         run: |
-          curl -sSf http://localhost:5000 || (echo "Web app did not respond" && exit 1)
+          echo "Waiting for web and ml services..."
+          until curl -s http://localhost:5001 || [ $SECONDS -ge 60 ]; do sleep 2; done
 
-      - name: Stop container
-        run: docker stop web-app-container
+      - name: Run tests inside web container
+        run: docker-compose exec -T web pytest web-app/test
+
+      - name: Shut down container
+        run: docker-compose down

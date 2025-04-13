@@ -54,7 +54,7 @@ def login():
     if users.count_documents({}) == 0:
         default_user = {
             "username": "admin",
-            "password": "admin123",  # In a real app, this should be hashed
+            "password": "admin123",
             "email": "admin@example.com"
         }
         users.insert_one(default_user)
