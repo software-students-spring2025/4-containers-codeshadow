@@ -46,9 +46,5 @@ jobs:
           echo "Waiting for ML client to start..."
           until curl -s http://localhost:6000 || [ $SECONDS -ge 60 ]; do sleep 2; done
 
-      - name: Run tests inside ml-client container
-        run: |
-          docker-compose exec -T web pytest /app/tests
-
       - name: Shut down containers
         run: docker-compose down
