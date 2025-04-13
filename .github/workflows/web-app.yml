@@ -58,7 +58,7 @@ jobs:
           until curl -s http://localhost:5001 || [ $SECONDS -ge 60 ]; do sleep 2; done
 
       - name: Run tests inside web container
-        run: docker-compose exec -T web pytest web-app/test
+        run: docker-compose exec -T web pytest /app/test
 
       - name: Shut down container
         run: docker-compose down
