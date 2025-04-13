@@ -2,6 +2,7 @@ name: ML Client CI
 
 on:
   push:
+    branches: [main]
     paths:
       - 'machine-learning-client/**'
       - 'ai.py'
@@ -9,6 +10,7 @@ on:
       - '.github/workflows/ml-client.yml'
   
   pull_request:
+    branches: [main]
     paths:
       - 'machine-learning-client/**'
       - '.github/workflows/ml-client.yml'
