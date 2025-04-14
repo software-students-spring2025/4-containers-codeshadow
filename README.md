@@ -119,3 +119,6 @@ This will run 5 tests that check our homepage, login/signup, database changing w
 - GitHub Actions workflows for both the web app and the ML client
 - Automatic linting and testing on pull requests
 - Status badges are displayed at the top of this README
+
+## Task Board
+Take a look at our task board [here](https://github.com/orgs/software-students-spring2025/projects/179/views/1)!

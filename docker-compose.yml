@@ -9,7 +9,7 @@ services:
       - .env
 
   ml:
-    build: ./machine_learning_client
+    build: ./machine-learning-client
     ports:
       - "6000:6000"
 
